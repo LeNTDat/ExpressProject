@@ -1,0 +1,25 @@
+{
+  "name": "expressproject",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LeNTDat/ExpressProject.git"
+  },
+  "author": "Dat",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LeNTDat/ExpressProject/issues"
+  },
+  "homepage": "https://github.com/LeNTDat/ExpressProject#readme",
+  "devDependencies": {
+    "body-parser": "^2.2.0",
+    "express": "^5.1.0",
+    "nodemon": "^3.1.10"
+  }
+}
