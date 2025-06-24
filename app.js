@@ -1,30 +1,21 @@
 const express = require('express');
-
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
+const path = require('path');
 
 const app  = express();
 
+const adminRoutes = require('./routes/admin');
+const shopRountes = require('./routes/shop');
+
 app.use(bodyParser.urlencoded());
+app.use(express.static(path.join(__dirname, 'public')))
 
-app.use('/add-product',(req, res, next)=>{
-    console.log("In another 1 middleware");
-    res.send(`<form action="/product" method="POST">
-        <input type="text" name="title">
-            <button type="submit">
-                Add product
-            </button>
-        </input>
-    </form>`);
-});
+app.use('/admin',adminRoutes);
+app.use(shopRountes);
 
-app.use('/product', (req, res, next)=>{
-    console.log(req.body);
-    res.redirect('/')
+app.use((req, res, next)=>{
+    res.status(404).sendFile(path.join(__dirname, 'views', '404.html'))
 })
 
-app.use('/',(req, res, next)=>{
-    console.log("In another 2 middleware");
-    res.send('<h1>Hello</h1>')
-});
 
 app.listen(8000);
