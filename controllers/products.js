@@ -1,16 +1,19 @@
-const products = [];
+const Product = require('../models/product')
 
 const getAddProduct = (req, res)=>{
     res.render('add-product', {title: "Add product"})
 }
 
 const onAddProducts = (req, res)=>{
-    products.push({title : req.body.title})
+    const productModel = new Product(req.body.title);
+    productModel.save();
     res.redirect('/')
 }
 
 const getProducts = (req, res)=>{
-    res.render('shop', {prods : products, docTitle : 'Shop'})
+    Product.fetchAll((allProduct)=>{
+        res.render('shop', {prods : allProduct, docTitle : 'Shop'})
+    });
 }
 
 module.exports = {

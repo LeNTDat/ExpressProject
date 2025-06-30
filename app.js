@@ -4,6 +4,7 @@ const path = require('path');
 const expressHbs = require('express-handlebars');
 const ejs = require('ejs');
 const app  = express();
+const errorsController = require('./controllers/errors');
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
@@ -17,9 +18,6 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use('/admin',adminRoutes);
 app.use(shopRountes);
 
-app.use((req, res, next)=>{
-    res.status(404).render('404', {title: "Page Not Found"})
-})
-
+app.use(errorsController.onNotFoundPage);
 
 app.listen(8000);
