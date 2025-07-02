@@ -41,11 +41,32 @@ const getCheckout = (req, res, next) => {
   });
 };
 
+const getProduct = (req, res, next)=>{
+  const productId = req.params.productId;
+  Product.findById(productId, (product)=>{
+    res.render('shop/product-detail',{
+      path: '/products',
+      product,
+    })
+  })
+}
+
+const postCart = (req, res, next)=>{
+  const selectedId = req.params.productId;
+  Product.findById(selectedId,(product)=>{
+    res.render('shop/cart', {
+      path: '/cart',
+      product
+    })
+  })
+}
 
 module.exports ={
     getIndex,
     getProducts,
     getCart,
     getOrders,
-    getCheckout
+    getCheckout,
+    getProduct,
+    postCart
 }
