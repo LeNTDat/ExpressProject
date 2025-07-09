@@ -31,6 +31,17 @@ class Product {
         })
     }
 
+    edit(updatedProduct){
+        getProductsFromFile((product)=>{
+            let allProduct = [...product];
+            const productIndex = product.findIndex(item=>item.id === updatedProduct.id);
+            allProduct[productIndex] = updatedProduct;
+            fs.writeFile(p, JSON.stringify(allProduct), (err)=>{
+                console.log(err);
+            })
+        })
+    }
+
     static fetchAll(callBack) {
         getProductsFromFile(callBack)
     }
