@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const rootDir = require('../utils/path');
+const Cart = require('../models/cart')
 let p = path.join(rootDir, 'data', 'product.json').toString();
 
 const getProductsFromFile = (cb) => {
@@ -38,6 +39,20 @@ class Product {
             allProduct[productIndex] = updatedProduct;
             fs.writeFile(p, JSON.stringify(allProduct), (err)=>{
                 console.log(err);
+            })
+        })
+    }
+
+    static delete(id){
+        getProductsFromFile(product=>{
+            let newProduct = [...product];
+
+            newProduct = newProduct.filter(item=>item.id !== id);
+            fs.writeFile(p, JSON.stringify(newProduct), err=>{
+                console.log(err);
+                if(!err){
+                    Cart.deleteItem(id, product.price)
+                }
             })
         })
     }

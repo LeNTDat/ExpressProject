@@ -24,7 +24,6 @@ const onAddProducts = (req, res) => {
 const getEditProduct = (req, res) => {
     const editMode = req.query.edit === 'true';
     const id = req.params.productId;
-    console.log("req.query", req.query);
     if(!editMode){
         return res.redirect('/');
     }
@@ -43,7 +42,6 @@ const getEditProduct = (req, res) => {
 
 const onEditProduct = (req, res)=>{
     const body = req.body;
-    console.log("body", body);
     
     const updatedProduct = {
         "title": body.title,
@@ -55,6 +53,12 @@ const onEditProduct = (req, res)=>{
     const product = new Product();
     product.edit(updatedProduct);
     return res.redirect('/')
+}
+
+const onDeleteProduct = (req, res)=>{
+    const selectedId = req.body.productId;
+    Product.delete(selectedId)    
+    return res.redirect('/admin/products')
 }
 
 const getProducts = (req, res) => {
@@ -72,5 +76,6 @@ module.exports = {
     onAddProducts,
     getProducts,
     getEditProduct,
-    onEditProduct
+    onEditProduct,
+    onDeleteProduct
 }

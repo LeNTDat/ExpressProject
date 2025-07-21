@@ -17,8 +17,8 @@ class Cart {
             const existingProduct = cart.products[existingProductIndex];
             let updateProduct;
             if(existingProduct){
-                updateProduct = {...updateProduct};
-                updateProduct.qty = updateProduct + 1;
+                updateProduct = {...existingProduct};
+                updateProduct.qty += 1;
                 cart.products = [...cart.products];
                 cart.products[existingProductIndex] = updateProduct;
             }else{
@@ -27,14 +27,28 @@ class Cart {
             }
             cart.totalPrice += (+productPrice);
             cart.products = [...cart.products]
-            console.log(JSON.stringify(cart));
             
             fs.writeFile(p, JSON.stringify(cart), (err)=>{
                 console.log(err);
             })
         })
+    }
 
-        //('{"products":[{"qty":1}],"...')
+    static deleteItem (id, productPrice){
+        fs.readFile(p,(err, content)=>{
+            if(err){
+                return
+            }
+
+            const updatedCart = [...content];
+            const product = updatedCart.products.find(item=> item.id === id)
+            const productQty = product.qty;
+            updatedCart.products = updatedCart.products.filter(item => item.id !== id)
+            updatedCart.totalPrice =  updatedCart.totalPrice - productPrice * productQty;
+            fs.writeFile(p, JSON.stringify(updatedCart), (err)=>{
+                console.log(err);
+            })
+        })
     }
 }
 
