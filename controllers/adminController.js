@@ -7,7 +7,8 @@ const getAddProduct = (req, res) => {
         formsCSS: true,
         productCSS: true,
         activeAddProduct: true,
-        editting: false
+        editting: false,
+        product:[]
     })
 }
 
@@ -16,9 +17,13 @@ const onAddProducts = (req, res) => {
     const imageUrl = req.body.imageUrl;
     const price = req.body.price;
     const description = req.body.description;
-    const product = new Product(title, imageUrl, description, price);
-    product.save();
-    res.redirect('/')
+    const product = new Product(null ,title, imageUrl, description, price);
+    product
+    .save()
+    .then(()=>{
+        res.redirect('/')
+    })
+    .catch(err=>console.log(err));
 }
 
 const getEditProduct = (req, res) => {
@@ -62,13 +67,13 @@ const onDeleteProduct = (req, res)=>{
 }
 
 const getProducts = (req, res) => {
-    Product.fetchAll((allProduct) => {
+    Product.fetchAll().then(([products, fieldData]) => {
         res.render('admin/products', {
-            prods: allProduct,
+            prods: products,
             pageTitle: 'Admin Products',
             path: '/admin/products'
         })
-    });
+    }).catch(err => console.log(err))
 }
 
 module.exports = {
