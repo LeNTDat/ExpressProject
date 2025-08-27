@@ -17,13 +17,23 @@ const onAddProducts = (req, res) => {
     const imageUrl = req.body.imageUrl;
     const price = req.body.price;
     const description = req.body.description;
-    const product = new Product(null ,title, imageUrl, description, price);
-    product
-    .save()
-    .then(()=>{
+    Product.create({
+        title,
+        imageUrl,
+        price,
+        description
+    }).then((result)=>{
+        console.log(result)
         res.redirect('/')
-    })
-    .catch(err=>console.log(err));
+    }).catch(err=>console.log(err))
+    
+    // const product = new Product(null ,title, imageUrl, description, price);
+    // product
+    // .save()
+    // .then(()=>{
+    //     res.redirect('/')
+    // })
+    // .catch(err=>console.log(err));
 }
 
 const getEditProduct = (req, res) => {
@@ -32,17 +42,19 @@ const getEditProduct = (req, res) => {
     if(!editMode){
         return res.redirect('/');
     }
-    Product.findById(id, (product)=>{
-        if(!product){
+    Product.findByPk(id).then((product)=>{
+        console.log("product", product);
+        
+        if (!product) {
             return res.redirect('/')
         }
-        res.render('admin/edit-product', {
+        return res.render('admin/edit-product', {
             pageTitle: 'Edit Product',
             path: '/admin/edit-product',
-            editting : editMode,
+            editting: editMode,
             product: product
         })
-    })
+    }).catch(err=>console.log(err))
 }
 
 const onEditProduct = (req, res)=>{
@@ -55,9 +67,13 @@ const onEditProduct = (req, res)=>{
         "price": body.price,
         "id": body.productId 
     }
-    const product = new Product();
-    product.edit(updatedProduct);
-    return res.redirect('/')
+    Product.update(updatedProduct, {
+        where : {
+            id : body.productId
+        }
+    }).then(()=>{
+       return res.redirect('/')
+    }).catch(err=>console.log(err))
 }
 
 const onDeleteProduct = (req, res)=>{
@@ -67,7 +83,7 @@ const onDeleteProduct = (req, res)=>{
 }
 
 const getProducts = (req, res) => {
-    Product.fetchAll().then(([products, fieldData]) => {
+    Product.findAll().then((products) => {
         res.render('admin/products', {
             prods: products,
             pageTitle: 'Admin Products',

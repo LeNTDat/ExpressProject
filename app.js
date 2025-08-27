@@ -9,6 +9,8 @@ const errorsController = require('./controllers/errors');
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
+const sequelize =  require('./utils/database');
+
 const adminRoutes = require('./routes/admin');
 const shopRountes = require('./routes/shop');
 
@@ -20,4 +22,6 @@ app.use(shopRountes);
 
 app.use(errorsController.onNotFoundPage);
 
-app.listen(8000);
+sequelize.sync().then((result)=>{
+    app.listen(8000);
+}).catch(err=>console.log(err));
